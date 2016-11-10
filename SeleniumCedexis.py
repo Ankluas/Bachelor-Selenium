@@ -5,7 +5,7 @@ import time
 driver = webdriver.Chrome('E:/Programme/chromedriver.exe')
 driver.set_page_load_timeout(20)
 counter = 0
-list = open("E:/Eigene Dateien/list/test.txt", "r")
+list = open("E:/Eigene Dateien/list/list.txt", "r")
 
 while True:
     try:
