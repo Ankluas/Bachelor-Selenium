@@ -3,7 +3,8 @@ from selenium.webdriver.common.keys import Keys
 import time
 
 driver = webdriver.Chrome('E:/Programme/chromedriver.exe')
-driver.set_page_load_timeout(20)
+driver.set_page_load_timeout(30)
+index = 0
 counter = 0
 list = open("E:/Eigene Dateien/list/list.txt", "r")
 
@@ -15,13 +16,16 @@ while True:
                 time.sleep(3)
                 html = driver.execute_script("return document.documentElement.outerHTML")
                 if (html.find("cedexis") == -1):
-                    print("not found")
+                    index += 1
+                    print(index, "not found")
                 else:
-                    print("FOUND")
+                    index += 1
+                    print(index, "FOUND")
                     counter += 1
     except:
         TimeoutError
-        print("Site couldn't load!")
+        index += 1
+        print(index, "Site couldn't load!")
         continue
     break
 
