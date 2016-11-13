@@ -8,11 +8,13 @@ linkIndex = 0
 cedexisCounter = 0
 notLoadedCounter = 0
 
-list = open("E:/Eigene Dateien/list/list.txt", "r")
+#change directory to your preference
+readList = open("E:/Eigene Dateien/list/list_Test.txt", "r")
+writeList = open("E:/Eigene Dateien/list/cedexisList.txt", "w")
 
 while True:
     try:
-        for line in list:
+        for line in readList:
             if line.strip():
                 driver.get(line)
                 time.sleep(3)
@@ -23,6 +25,7 @@ while True:
                 else:
                     linkIndex += 1
                     print(linkIndex, "FOUND")
+                    writeList.write(line)
                     cedexisCounter += 1
     except:
         TimeoutError
@@ -33,7 +36,8 @@ while True:
     break
 
 
-list.close()
+readList.close()
+writeList.close()
 driver.close()
 print("Number of sites using Cedexis:", cedexisCounter)
 print("Not loaded sites:", notLoadedCounter)
