@@ -4,8 +4,10 @@ import time
 
 driver = webdriver.Chrome('E:/Programme/chromedriver.exe')
 driver.set_page_load_timeout(30)
-index = 0
-counter = 0
+linkIndex = 0
+cedexisCounter = 0
+notLoadedCounter = 0
+
 list = open("E:/Eigene Dateien/list/list.txt", "r")
 
 while True:
@@ -16,20 +18,22 @@ while True:
                 time.sleep(3)
                 html = driver.execute_script("return document.documentElement.outerHTML")
                 if (html.find("cedexis") == -1):
-                    index += 1
-                    print(index, "not found")
+                    linkIndex += 1
+                    print(linkIndex, "not found")
                 else:
-                    index += 1
-                    print(index, "FOUND")
-                    counter += 1
+                    linkIndex += 1
+                    print(linkIndex, "FOUND")
+                    cedexisCounter += 1
     except:
         TimeoutError
-        index += 1
-        print(index, "Site couldn't load!")
+        linkIndex += 1
+        notLoadedCounter += 1
+        print(linkIndex, "Site couldn't load!")
         continue
     break
 
 
 list.close()
 driver.close()
-print("Number of sites using Cedexis:", counter)
+print("Number of sites using Cedexis:", cedexisCounter)
+print("Not loaded sites:", notLoadedCounter)
