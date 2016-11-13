@@ -25,7 +25,7 @@ while True:
                 else:
                     linkIndex += 1
                     print(linkIndex, "FOUND")
-                    writeList.write(line)
+                    writeList.write(str(linkIndex) + " " + line)
                     cedexisCounter += 1
     except:
         TimeoutError
