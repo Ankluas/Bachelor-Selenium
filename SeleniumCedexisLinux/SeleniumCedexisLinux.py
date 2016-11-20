@@ -22,7 +22,7 @@ def dealwith(driver):
         cedexisCounter += 1
 
 
-driver = webdriver.Chrome('E:/Programme/chromedriver.exe')
+driver = webdriver.Chrome()
 driver.set_page_load_timeout(30)
 linkIndex = 0
 cedexisCounter = 0
@@ -30,9 +30,9 @@ failedCounter = 0
 
 # change directory to your preference
 # list of links which are visited by the webdriver searching for the word cedexis in their html code
-readList = open('E:/Eigene Dateien/list/list_Test.txt', "r")
+readList = open("list_Test.txt", "r")
 # list of all links which contains the word cedexis in their html code
-writeList = open('E:/Eigene Dateien/list/cedexisList.txt', "w")
+writeList = open("cedexisList.txt", "w")
 
 
 for line in readList:
