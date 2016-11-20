@@ -62,12 +62,13 @@ for line in readList:
             # ignore and search html as usual
             dealwith(driver)
         except Exception:
-            linkIndex += 1
-            failedCounter += 1
-            print(linkIndex, "Failed")
-
+            # linkIndex += 1
+            # failedCounter += 1
+            # print(linkIndex, "Failed")
+            dealwith(driver)
+            
 readList.close()
 writeList.close()
-driver.close()
+driver.quit()
 print("Number of sites using Cedexis:", cedexisCounter)
 print("Failed Sites:", failedCounter)
