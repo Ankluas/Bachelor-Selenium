@@ -5,8 +5,8 @@ import time
 import urllib
 # from html.parser import HTMLParser
 from urllib.request import urlopen
-from bs4 import BeautifulSoup
-# import re
+from bs4 import BeautifulSoup, Comment
+import re
 
 
 def dealwith(driver):
@@ -26,10 +26,30 @@ def dealwith(driver):
         cedexisCounter += 1
         # parse HTML code from variable html in soup
         soup = BeautifulSoup(html, 'html.parser')
-        for t in soup.select('script[src*=cedexis]'):
-            print(t['src'])
-            cedexisLine = t['src']
-            #driver.get(cedexisLine)
+        # searching HTML code in script tags and iframe tags for radar and getting the src
+        for t in soup.select('script[src*=radar]'):
+            if t:
+                print(t['src'])
+                cedexisLine = t['src']
+                cedexisLine = cedexisLine.replace("radar.html", "radar.js")
+                driver.get("http:" + cedexisLine)
+                versionHTML = driver.execute_script("return document.documentElement.outerHTML")
+                soupVersion = BeautifulSoup(versionHTML, 'html.parser')
+
+                # testblock
+                # matchObject = re.search(r'(.*) Cedexis (.*?) .*', line)
+                # print(matchObject.group())
+
+
+
+        for t in soup.select('iframe[src*=radar]'):
+            if t:
+                print(t['src'])
+                cedexisLine = t['src']
+                cedexisLine = cedexisLine.replace("radar.js", "radar.html")
+                driver.get("http:" + cedexisLine)
+                versionHTML = driver.execute_script("return document.documentElement.outerHTML")
+                soupVersion = BeautifulSoup(versionHTML, 'html.parser')
 
 
 
@@ -42,7 +62,7 @@ failedCounter = 0
 
 # change directory to your preference
 # list of links which are visited by the webdriver searching for the word cedexis in their html code
-readList = open("list_Test.txt", "r")
+readList = open("list_lol.txt", "r")
 # list of all links which contains the word cedexis in their html code
 writeList1 = open("cedexisList.txt", "w")
 writeList2 = open("versionList.txt", "w")
@@ -75,9 +95,9 @@ for line in readList:
             # ignore and search html as usual
             dealwith(driver)
         except Exception:
-            #linkIndex += 1
-            #failedCounter += 1
-            #print(linkIndex, "Failed")
+            # linkIndex += 1
+            # failedCounter += 1
+            # print(linkIndex, "Failed")
             dealwith(driver)
 
 readList.close()
