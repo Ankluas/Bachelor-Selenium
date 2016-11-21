@@ -3,6 +3,10 @@ from selenium import webdriver
 import time
 # import http
 import urllib
+# from html.parser import HTMLParser
+from urllib.request import urlopen
+from bs4 import BeautifulSoup
+# import re
 
 
 def dealwith(driver):
@@ -18,8 +22,16 @@ def dealwith(driver):
         # if cedexis was found
         linkIndex += 1
         print(linkIndex, "FOUND")
-        writeList.write(str(linkIndex) + " " + line)
+        writeList1.write(str(linkIndex) + " " + line)
         cedexisCounter += 1
+        # parse HTML code from variable html in soup
+        soup = BeautifulSoup(html, 'html.parser')
+        for t in soup.select('script[src*=cedexis]'):
+            print(t['src'])
+            cedexisLine = t['src']
+            #driver.get(cedexisLine)
+
+
 
 
 driver = webdriver.Chrome('E:/Programme/chromedriver.exe')
@@ -32,7 +44,8 @@ failedCounter = 0
 # list of links which are visited by the webdriver searching for the word cedexis in their html code
 readList = open('E:/Eigene Dateien/list/list_Test.txt', "r")
 # list of all links which contains the word cedexis in their html code
-writeList = open('E:/Eigene Dateien/list/cedexisList.txt', "w")
+writeList1 = open('E:/Eigene Dateien/list/cedexisList.txt', "w")
+writeList2 = open('E:/Eigene Dateien/list/versionList.txt', "w")
 
 
 for line in readList:
@@ -41,17 +54,17 @@ for line in readList:
             # try to reach website
             req = urllib.request.Request(line)
             urllib.request.urlopen(req)
-            # visit website
+            # visit website with driver
             driver.get(line)
             time.sleep(3)
             dealwith(driver)
         except urllib.error.URLError:
             # try https
-            newLine = line.replace("http", "https")
+            line = line.replace("http", "https")
             try:
-                req = urllib.request.Request(newLine)
+                req = urllib.request.Request(line)
                 urllib.request.urlopen(req)
-                driver.get(newLine)
+                driver.get(line)
                 time.sleep(3)
                 dealwith(driver)
             except urllib.error.URLError as e:
@@ -68,7 +81,8 @@ for line in readList:
             dealwith(driver)
 
 readList.close()
-writeList.close()
+writeList1.close()
+writeList2.close()
 driver.quit()
 print("Number of sites using Cedexis:", cedexisCounter)
 print("Failed Sites:", failedCounter)
