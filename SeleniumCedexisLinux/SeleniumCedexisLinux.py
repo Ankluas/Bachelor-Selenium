@@ -26,7 +26,7 @@ def dealwith(driver):
         cedexisCounter += 1
         # parse HTML code from variable html in soup
         soup = BeautifulSoup(html, 'html.parser')
-        # searching HTML code in script tags and iframe tags for radar and getting the src
+        # searching HTML code in script tags for radar and getting the src
         for t in soup.select('script[src*=radar]'):
             if t:
                 print(t['src'])
@@ -37,11 +37,10 @@ def dealwith(driver):
                 soupVersion = BeautifulSoup(versionHTML, 'html.parser')
 
                 # testblock
-                # matchObject = re.search(r'(.*) Cedexis (.*?) .*', line)
-                # print(matchObject.group())
+                #versionComment = re.search(r"^[ ]*?\\\\.*?\n")
+               # print(versionComment.group(0))
 
-
-
+        # searching HTML code in iframe tags for radar and getting the src
         for t in soup.select('iframe[src*=radar]'):
             if t:
                 print(t['src'])
@@ -50,11 +49,10 @@ def dealwith(driver):
                 driver.get("http:" + cedexisLine)
                 versionHTML = driver.execute_script("return document.documentElement.outerHTML")
                 soupVersion = BeautifulSoup(versionHTML, 'html.parser')
+                #print(soupVersion)
 
 
-
-
-driver = webdriver.Chrome()
+driver = webdriver.Chrome("chromedriver.exe")
 driver.set_page_load_timeout(30)
 linkIndex = 0
 cedexisCounter = 0
@@ -62,7 +60,7 @@ failedCounter = 0
 
 # change directory to your preference
 # list of links which are visited by the webdriver searching for the word cedexis in their html code
-readList = open("list_lol.txt", "r")
+readList = open("list_Thousand.txt", "r")
 # list of all links which contains the word cedexis in their html code
 writeList1 = open("cedexisList.txt", "w")
 writeList2 = open("versionList.txt", "w")
@@ -72,7 +70,7 @@ for line in readList:
     if line.strip():
         try:
             # try to reach website
-            req = urllib.request.Request(line)
+            req = urllib.request.Request(line, headers={'User-Agent': 'Mozilla/5.0'})
             urllib.request.urlopen(req)
             # visit website with driver
             driver.get(line)
@@ -82,7 +80,7 @@ for line in readList:
             # try https
             line = line.replace("http", "https")
             try:
-                req = urllib.request.Request(line)
+                req = urllib.request.Request(line, headers={'User-Agent': 'Mozilla/5.0'})
                 urllib.request.urlopen(req)
                 driver.get(line)
                 time.sleep(3)
@@ -94,11 +92,11 @@ for line in readList:
         except TimeoutError:
             # ignore and search html as usual
             dealwith(driver)
-        except Exception:
-            # linkIndex += 1
+        except:
+            linkIndex += 1
             # failedCounter += 1
-            # print(linkIndex, "Failed")
-            dealwith(driver)
+            print(linkIndex, "UNEXPECTED EXCEPTION", )
+            #dealwith(driver)
 
 readList.close()
 writeList1.close()

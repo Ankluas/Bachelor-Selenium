@@ -70,7 +70,7 @@ for line in readList:
     if line.strip():
         try:
             # try to reach website
-            req = urllib.request.Request(line)
+            req = urllib.request.Request(line, headers={'User-Agent': 'Mozilla/5.0'})
             urllib.request.urlopen(req)
             # visit website with driver
             driver.get(line)
@@ -80,7 +80,7 @@ for line in readList:
             # try https
             line = line.replace("http", "https")
             try:
-                req = urllib.request.Request(line)
+                req = urllib.request.Request(line, headers={'User-Agent': 'Mozilla/5.0'})
                 urllib.request.urlopen(req)
                 driver.get(line)
                 time.sleep(3)
@@ -92,11 +92,11 @@ for line in readList:
         except TimeoutError:
             # ignore and search html as usual
             dealwith(driver)
-        except Exception:
-            # linkIndex += 1
+        except:
+            linkIndex += 1
             # failedCounter += 1
-            # print(linkIndex, "Failed")
-            dealwith(driver)
+            print(linkIndex, "UNEXPECTED EXCEPTION", )
+            #dealwith(driver)
 
 readList.close()
 writeList1.close()
