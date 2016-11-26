@@ -26,7 +26,7 @@ def dealwith(driver):
         cedexisCounter += 1
         # parse HTML code from variable html in soup
         soup = BeautifulSoup(html, 'html.parser')
-        # searching HTML code in script tags and iframe tags for radar and getting the src
+        # searching HTML code in script tags for radar and getting the src
         for t in soup.select('script[src*=radar]'):
             if t:
                 print(t['src'])
@@ -37,11 +37,10 @@ def dealwith(driver):
                 soupVersion = BeautifulSoup(versionHTML, 'html.parser')
 
                 # testblock
-                # matchObject = re.search(r'(.*) Cedexis (.*?) .*', line)
-                # print(matchObject.group())
+                #versionComment = re.search(r"^[ ]*?\\\\.*?\n")
+               # print(versionComment.group(0))
 
-
-
+        # searching HTML code in iframe tags for radar and getting the src
         for t in soup.select('iframe[src*=radar]'):
             if t:
                 print(t['src'])
@@ -50,8 +49,7 @@ def dealwith(driver):
                 driver.get("http:" + cedexisLine)
                 versionHTML = driver.execute_script("return document.documentElement.outerHTML")
                 soupVersion = BeautifulSoup(versionHTML, 'html.parser')
-
-
+                #print(soupVersion)
 
 
 driver = webdriver.Chrome('E:/Programme/chromedriver.exe')
