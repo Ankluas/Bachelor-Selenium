@@ -45,6 +45,7 @@ def getVersion(soup):
                 if versionString:
                     print(versionString)
                     versionList.write(str(linkIndex) + " " + line + str(versionString) + "\n\n")
+                    versionList.flush()
         # searching HTML code in iframe tags for radar and getting the src
         for t in soup.select('iframe[src*=radar]'):
             if t:
@@ -59,6 +60,7 @@ def getVersion(soup):
                 if versionString:
                     print(versionString)
                     versionList.write(str(linkIndex) + " " + line + str(versionString) + "\n\n")
+                versionList.flush()
 
 
 def dealwithAll(driver):
@@ -97,6 +99,7 @@ def dealwithKnockout(driver):
             # if Knockout was found
             print(linkIndex, "Knockout FOUND")
             knockoutList.write(str(linkIndex) + " " + line)
+            knockoutList.flush()
             knockoutCounter += 1
     except TimeoutError:
         failedCounter += 1
@@ -121,6 +124,7 @@ def dealwithBackbone(driver):
             # if Backbone React was found
             print(linkIndex, "Backbone FOUND")
             backboneList.write(str(linkIndex) + " " + line)
+            backboneList.flush()
             backboneCounter += 1
     except TimeoutError:
         failedCounter += 1
@@ -145,6 +149,7 @@ def dealwithEmber(driver):
             # if Ember React was found
             print(linkIndex, "Ember FOUND")
             emberList.write(str(linkIndex) + " " + line)
+            emberList.flush()
             emberCounter += 1
     except TimeoutError:
         failedCounter += 1
@@ -170,6 +175,7 @@ def dealwithReact(driver):
             # if Google React was found
             print(linkIndex, "React FOUND")
             reactList.write(str(linkIndex) + " " + line)
+            reactList.flush()
             reactCounter += 1
     except TimeoutError:
         failedCounter += 1
@@ -194,6 +200,7 @@ def dealwithAdSense(driver):
             # if Google Adsense was found
             print(linkIndex, "Adsense FOUND")
             adSenseList.write(str(linkIndex) + " " + line)
+            adSenseList.flush()
             adSenseCounter += 1
     except TimeoutError:
         failedCounter += 1
@@ -218,6 +225,7 @@ def dealwithAngular(driver):
             # if Angular was found
             print(linkIndex, "Angular FOUND")
             angularList.write(str(linkIndex) + " " + line)
+            angularList.flush()
             angularCounter += 1
     except TimeoutError:
         failedCounter += 1
@@ -236,13 +244,14 @@ def dealwithjQuery(driver):
         global linkIndex
         global jQueryCounter
         global failedCounter
-        if (html.find("jquery") == -1):
+        if ((html.find("jquery") == -1) or (html.find("jQuery") == -1)):
             # if jQuery wasn't found
             print(linkIndex, "jQuery not found")
         else:
             # if jQuery was found
             print(linkIndex, "jQuery FOUND")
             jQueryList.write(str(linkIndex) + " " + line)
+            jQueryList.flush()
             jQueryCounter += 1
     except TimeoutError:
         failedCounter += 1
@@ -269,6 +278,7 @@ def dealwithCedexis(driver):
             # if cedexis was found
             print(linkIndex, "Cedexis FOUND")
             cedexisList.write(str(linkIndex) + " " + line)
+            cedexisList.flush()
             cedexisCounter += 1
             # parse HTML code from variable html in soup
             soup = BeautifulSoup(html, 'html.parser')
@@ -296,19 +306,19 @@ knockoutCounter = 0
 failedCounter = 0
 # change directory to your preference
 # list of links which are visited by the webdriver searching for the word cedexis, ... in their html code
-readList = open("list_Thousand.txt", "r")
+readList = open('list_Million.txt', "r")
 # list of all links which contains the word cedexis in their html code
-cedexisList = open("cedexisList.txt", "w")
+cedexisList = open('cedexisList.txt', "w")
 # list of the index, website and version
-versionList = open("versionList.txt", "w")
+versionList = open('versionList.txt', "w")
 # same as for cedexis
-jQueryList = open("jQueryList.txt", "w")
-angularList = open("angularList.txt", "w")
-adSenseList = open("adSenseList.txt", "w")
-reactList = open("reactList.txt", "w")
-emberList = open("emberList.txt", "w")
-backboneList = open("backboneList.txt", "w")
-knockoutList = open("knockoutList.txt", "w")
+jQueryList = open('jQueryList.txt', "w")
+angularList = open('angularList.txt', "w")
+adSenseList = open('adSenseList.txt', "w")
+reactList = open('reactList.txt', "w")
+emberList = open('emberList.txt', "w")
+backboneList = open('backboneList.txt', "w")
+knockoutList = open('knockoutList.txt', "w")
 
 for line in readList:
     driver = webdriver.Chrome()
