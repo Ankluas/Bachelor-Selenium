@@ -34,6 +34,8 @@ def getVersion(soup):
     # searching HTML code in script tags for radar and getting the src
         for t in soup.select('script[src*=radar]'):
             if t:
+                srcList.write(str(linkIndex) + " " + "script \n")
+                srcList.flush()
                 print(t['src'])
                 cedexisLine = t['src']
                 cedexisLine = cedexisLine.replace("radar.js", "radar.html")
@@ -49,6 +51,8 @@ def getVersion(soup):
         # searching HTML code in iframe tags for radar and getting the src
         for t in soup.select('iframe[src*=radar]'):
             if t:
+                srcList.write(str(linkIndex) + " " + "iframe \n")
+                srcList.flush()
                 print(t['src'])
                 cedexisLine = t['src']
                 cedexisLine = cedexisLine.replace("radar.js", "radar.html")
@@ -319,6 +323,8 @@ reactList = open('reactList.txt', "w")
 emberList = open('emberList.txt', "w")
 backboneList = open('backboneList.txt', "w")
 knockoutList = open('knockoutList.txt', "w")
+# found in iframe or script
+srcList = open('E:/Eigene Dateien/list/srcList.txt', "w")
 
 for line in readList:
     driver = webdriver.Chrome()
@@ -366,6 +372,7 @@ reactList.close()
 emberList.close()
 knockoutList.close()
 backboneList.close()
+srcList.close()
 print("Number of sites using Cedexis:", cedexisCounter)
 print("Number of sites using jQuery:", jQueryCounter)
 print("Number of sites using Angular:", angularCounter)
