@@ -30,29 +30,29 @@ def tryhttps(driver):
 
 
 # looks for the radar tag and gets the cedexis version
-def getVersion(soup):
-    # searching HTML code in script tags for radar and getting the src
-        for t in soup.select('script[src*=radar]'):
-            if t:
-                srcList.write(str(linkIndex) + " " + "script \n")
-                srcList.flush()
-                print(t['src'])
-                cedexisLine = t['src']
-                cedexisLine = cedexisLine.replace("radar.js", "radar.html")
-                # calls the radar site
-                driver.get("http:" + cedexisLine)
-                versionHTML = driver.execute_script("return document.documentElement.outerHTML")
-                # searching for version number with regular expressions and write result in versionList
-                versionString = re.search(r"[0-9]+\.[0-9]+\.[0-9]*", versionHTML)
-                if versionString:
-                    print(versionString)
-                    versionList.write(str(linkIndex) + " " + line + str(versionString) + "\n\n")
-                    versionList.flush()
-        # searching HTML code in iframe tags for radar and getting the src
+def getCedexisVersion(soup):
+    global cedexisCounter
+    global cflag
+    # searching HTML code in script tags in src attribute for radar and getting the src
+    for t in soup.select('script[src*=radar]'):
+        if t:
+            cflag = 1
+            print(t['src'])
+            cedexisLine = t['src']
+            cedexisLine = cedexisLine.replace("radar.js", "radar.html")
+            # calls the radar site
+            driver.get("http:" + cedexisLine)
+            versionHTML = driver.execute_script("return document.documentElement.outerHTML")
+            # searching for version number with regular expressions and write result in versionList
+            versionString = re.search(r"[0-9]+\.[0-9]+\.[0-9]*", versionHTML)
+            if versionString:
+                print(versionString)
+                cedexisList.write(str(linkIndex) + " " + "found" + " " + "script" + " " + str(cedexisLine) + " " + str(versionString) + " " + line)
+                cedexisList.flush()
+        # searching HTML code in iframe tags in src attribute for radar and getting the src
+    if (cflag != 1):
         for t in soup.select('iframe[src*=radar]'):
             if t:
-                srcList.write(str(linkIndex) + " " + "iframe \n")
-                srcList.flush()
                 print(t['src'])
                 cedexisLine = t['src']
                 cedexisLine = cedexisLine.replace("radar.js", "radar.html")
@@ -63,8 +63,104 @@ def getVersion(soup):
                 versionString = re.search(r"[0-9]+\.[0-9]+\.[0-9]*", versionHTML)
                 if versionString:
                     print(versionString)
-                    versionList.write(str(linkIndex) + " " + line + str(versionString) + "\n\n")
-                versionList.flush()
+                    cedexisList.write(str(linkIndex) + " " + "found" + " " + "iframe" + " " + str(cedexisLine) + " " + str(versionString) + " " + line)
+                    cedexisList.flush()
+
+
+# looks for the jquery tag and gets the jQuery version
+def getjQueryVersion(soup):
+    global jflag
+    global jQueryCounter
+    # searching HTML code in script tags in src attribute for jQuery and getting the src
+    for t in soup.select('script[src*=jquery]'):
+        if t:
+            jflag = 1
+            print(t['src'])
+            jQueryLine = t['src']
+            #jQueryLine = jQueryLine.replace("radar.js", "radar.html")
+            # calls the version site
+            driver.get(jQueryLine)
+            versionHTML = driver.execute_script("return document.documentElement.outerHTML")
+            # searching for version number with regular expressions and write result in versionList
+            versionString = re.search(r"[0-9]+\.[0-9]+\.[0-9]*", versionHTML)
+            if versionString:
+                print(versionString)
+                jQueryList.write(str(linkIndex) + " " + "found" + " " + "script" + " " + str(jQueryLine) + " " + str(versionString) + " " + line)
+                jQueryList.flush()
+    # searching HTML code in iframe tags in src attribute for radar and getting the src
+    if(jflag != 1):
+        for t in soup.select('iframe[src*=jQuery]'):
+            if t:
+                print(t['src'])
+                jQueryLine = t['src']
+                #jQueryLine = jQueryLine.replace("radar.js", "radar.html")
+                # calls the version site
+                driver.get(jQueryLine)
+                versionHTML = driver.execute_script("return document.documentElement.outerHTML")
+                # searching for version number with regular expressions and write result in versionList
+                versionString = re.search(r"[0-9]+\.[0-9]+\.[0-9]*", versionHTML)
+                if versionString:
+                    print(versionString)
+                    jQueryList.write(str(linkIndex) + " " + "found" + " " + "iframe" + " " + str(jQueryLine) + " " + str(versionString) + " " + line)
+                    jQueryList.flush()
+
+
+# checks if the string ember is in a script tag
+def checkEmber(soup):
+    global emberCounter
+    # searching HTML code in script tags in src attribute for ember
+    for t in soup.select('script[src*=ember]'):
+        if t:
+            emberCounter += 1
+            emberLine = t['src']
+            emberList.write(str(linkIndex) + " " + "found" + " " + "script" + " " + str(emberLine) + " " + line)
+            emberList.flush()
+
+
+# checks if the string knockout is in a script tag
+def checkKnockout(soup):
+    global knockoutCounter
+    # searching HTML code in script tags in src attribute for knockout
+    for t in soup.select('script[src*=knockout]'):
+        if t:
+            knockoutCounter += 1
+            knockoutLine = t['src']
+            knockoutList.write(str(linkIndex) + " " + "found" + " " + "script" + " " + str(knockoutLine) + " " + line)
+            knockoutList.flush()
+
+
+# checks if the string backbone is in a script tag
+def checkBackbone(soup):
+    global backboneCounter
+    # searching HTML code in script tags in src attribute for backbone
+    for t in soup.select('script[src*=backbone]'):
+        if t:
+            backboneCounter += 1
+            backboneLine = t['src']
+            backboneList.write(str(linkIndex) + " " + "found" + " " + "script" + " " + str(backboneLine) + " " + line)
+            backboneList.flush()
+
+
+# checks if the string backbone is in a script tag
+def checkAngular(soup):
+    global angularCounter
+    # searching HTML code in script tags in src attribute for angular
+    for t in soup.select('script[src*=backbone]'):
+        if t:
+            angularCounter += 1
+            angularLine = t['src']
+            angularList.write(str(linkIndex) + " " + "found" + " " + "script" + " " + str(angularLine) + " " + line)
+            angularList.flush()
+
+
+# checks if the string react is in a script tag
+def checkReact(soup):
+    # searching HTML code in script tags in src attribute for knockout
+        for t in soup.select('script[src*=react]'):
+            if t:
+                reactCounter += 1
+                reactList.write(str(linkIndex) + " " + "found" + " " + "script" + " " + line)
+                reactList.flush()
 
 
 def dealwithAll(driver):
@@ -101,10 +197,10 @@ def dealwithKnockout(driver):
             print(linkIndex, "Knockout not found")
         else:
             # if Knockout was found
-            print(linkIndex, "Knockout FOUND")
-            knockoutList.write(str(linkIndex) + " " + line)
-            knockoutList.flush()
-            knockoutCounter += 1
+            print(linkIndex, "String Knockout FOUND")
+            # parse HTML code from variable html in soup
+            soup = BeautifulSoup(html, 'html.parser')
+            checkKnockout(soup)
     except TimeoutError:
         failedCounter += 1
         print(linkIndex, "TimeoutError")
@@ -125,11 +221,11 @@ def dealwithBackbone(driver):
             # if Backbone React wasn't found
             print(linkIndex, "Backbone not found")
         else:
-            # if Backbone React was found
-            print(linkIndex, "Backbone FOUND")
-            backboneList.write(str(linkIndex) + " " + line)
-            backboneList.flush()
-            backboneCounter += 1
+            # if Backbone was found
+            print(linkIndex, "String Backbone FOUND")
+            # parse HTML code from variable html in soup
+            soup = BeautifulSoup(html, 'html.parser')
+            checkBackbone(soup)
     except TimeoutError:
         failedCounter += 1
         print(linkIndex, "TimeoutError")
@@ -147,14 +243,14 @@ def dealwithEmber(driver):
         global emberCounter
         global failedCounter
         if (html.find("ember") == -1):
-            # if Ember React wasn't found
+            # if Ember wasn't found
             print(linkIndex, "Ember not found")
         else:
-            # if Ember React was found
-            print(linkIndex, "Ember FOUND")
-            emberList.write(str(linkIndex) + " " + line)
-            emberList.flush()
-            emberCounter += 1
+            # if Ember was found
+            print(linkIndex, "String Ember FOUND")
+            # parse HTML code from variable html in soup
+            soup = BeautifulSoup(html, 'html.parser')
+            checkEmber(soup)
     except TimeoutError:
         failedCounter += 1
         print(linkIndex, "TimeoutError")
@@ -177,10 +273,10 @@ def dealwithReact(driver):
             print(linkIndex, "React not found")
         else:
             # if Google React was found
-            print(linkIndex, "React FOUND")
-            reactList.write(str(linkIndex) + " " + line)
-            reactList.flush()
-            reactCounter += 1
+            print(linkIndex, "String React FOUND")
+            # parse HTML code from variable html in soup
+            soup = BeautifulSoup(html, 'html.parser')
+            checkReact(soup)
     except TimeoutError:
         failedCounter += 1
         print(linkIndex, "TimeoutError")
@@ -248,15 +344,16 @@ def dealwithjQuery(driver):
         global linkIndex
         global jQueryCounter
         global failedCounter
-        if ((html.find("jquery") == -1) or (html.find("jQuery") == -1)):
+        if (html.find("jQuery") == -1) and (html.find("jquery") == -1):
             # if jQuery wasn't found
             print(linkIndex, "jQuery not found")
         else:
             # if jQuery was found
             print(linkIndex, "jQuery FOUND")
-            jQueryList.write(str(linkIndex) + " " + line)
-            jQueryList.flush()
             jQueryCounter += 1
+            # parse HTML code from variable html in soup
+            soup = BeautifulSoup(html, 'html.parser')
+            getjQueryVersion(soup)
     except TimeoutError:
         failedCounter += 1
         print(linkIndex, "TimeoutError")
@@ -280,13 +377,11 @@ def dealwithCedexis(driver):
             print(linkIndex, "Cedexis not found")
         else:
             # if cedexis was found
-            print(linkIndex, "Cedexis FOUND")
-            cedexisList.write(str(linkIndex) + " " + line)
-            cedexisList.flush()
+            print(linkIndex, "String Cedexis FOUND")
             cedexisCounter += 1
             # parse HTML code from variable html in soup
             soup = BeautifulSoup(html, 'html.parser')
-            getVersion(soup)
+            getCedexisVersion(soup)
     except TimeoutError:
         failedCounter += 1
         print(linkIndex, "TimeoutError")
@@ -298,6 +393,8 @@ def dealwithCedexis(driver):
         print(linkIndex, "UNEXPECTED EXCEPTION", sys.exc_info()[0])
 
 
+jflag = 0
+cflag = 0
 linkIndex = 0
 cedexisCounter = 0
 angularCounter = 0
@@ -308,23 +405,20 @@ emberCounter = 0
 backboneCounter = 0
 knockoutCounter = 0
 failedCounter = 0
-# change directory to your preference
+# Windows: change directory to your preference
 # list of links which are visited by the webdriver searching for the word cedexis, ... in their html code
 readList = open('list_Million.txt', "r")
 # list of all links which contains the word cedexis in their html code
 cedexisList = open('cedexisList.txt', "w")
-# list of the index, website and version
-versionList = open('versionList.txt', "w")
 # same as for cedexis
-jQueryList = open('jQueryList.txt', "w")
+jQueryList = open('/jQueryList.txt', "w")
 angularList = open('angularList.txt', "w")
 adSenseList = open('adSenseList.txt', "w")
 reactList = open('reactList.txt', "w")
 emberList = open('emberList.txt', "w")
-backboneList = open('backboneList.txt', "w")
+backboneList = open('.txt', "w")
 knockoutList = open('knockoutList.txt', "w")
-# found in iframe or script
-srcList = open('E:/Eigene Dateien/list/srcList.txt', "w")
+
 
 for line in readList:
     driver = webdriver.Chrome()
@@ -365,14 +459,13 @@ for line in readList:
 
 readList.close()
 cedexisList.close()
-versionList.close()
 angularList.close()
 jQueryList.close()
 reactList.close()
 emberList.close()
 knockoutList.close()
 backboneList.close()
-srcList.close()
+driver.quit()
 print("Number of sites using Cedexis:", cedexisCounter)
 print("Number of sites using jQuery:", jQueryCounter)
 print("Number of sites using Angular:", angularCounter)
