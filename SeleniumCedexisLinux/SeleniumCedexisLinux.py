@@ -4,8 +4,13 @@ import sys
 import urllib
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
+import sys
 import re
 # from selenium.webdriver.common.keys import Keys
+
+# Necessary paramaters:
+# - list to read (txt)
+# - counter where to start (int)
 
 
 # try reaching the site with https, if reachable call dealwithAll(driver)
@@ -395,7 +400,7 @@ def dealwithCedexis(driver):
 
 jflag = 0
 cflag = 0
-linkIndex = 0
+linkIndex = int(sys.argv[2])
 cedexisCounter = 0
 angularCounter = 0
 jQueryCounter = 0
@@ -407,16 +412,16 @@ knockoutCounter = 0
 failedCounter = 0
 # Windows: change directory to your preference
 # list of links which are visited by the webdriver searching for the word cedexis, ... in their html code
-readList = open('list_Million.txt', "r")
+readList = open(sys.argv[1], "r")
 # list of all links which contains the word cedexis in their html code
 cedexisList = open('cedexisList.txt', "w")
 # same as for cedexis
-jQueryList = open('/jQueryList.txt', "w")
+jQueryList = open('jQueryList.txt', "w")
 angularList = open('angularList.txt', "w")
 adSenseList = open('adSenseList.txt', "w")
 reactList = open('reactList.txt', "w")
 emberList = open('emberList.txt', "w")
-backboneList = open('.txt', "w")
+backboneList = open('backboneList.txt', "w")
 knockoutList = open('knockoutList.txt', "w")
 
 
