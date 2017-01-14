@@ -4,38 +4,47 @@
 
 library("ggplot2")
 library("data.table")
-# read data
-parent.folder <- "E:/Eigene Dateien/results/runx/"
-#print (parent.folder)
-sub.folders <- list.dirs(parent.folder, recursive=TRUE)[-1]
-#print (sub.folders)
+
+# set parent folder
+parent.folder <- "E:/Eigene Dateien/results/runx"
+
+# get all sub folder of parent folder
+sub.folders <- list.dirs(parent.folder, recursive=TRUE)
 
 for(i in sub.folders){
   setwd(i)
-  # check whether txt exists and is empty or not, continue when existing and not empty
+  # check whether txt data exists and is empty or not, continue when existing and not empty
   if((file.exists("jQueryList.txt")) && ((file.size("jQueryList.txt")) > 0)) {
-    x <- 4 # test
-    data <- data.table(read.table("jQueryList.txt", fill = TRUE))
-    setnames(data,old="V1",new="number")
-    setnames(data,old="V2",new="found")
-    
-    # show data as table
-    print(data)
-    
-    # calc. average number of websites that use jQuery
-    data[,nrow(data)/max(number)]
-    
-    # add a cumulative sum of how many websites were found
-    data[,count:=1]
-    data[,count:=cumsum(count)]
-    
-    # plot this data
-    ggplot(data,aes(number,count)) + geom_line()
+    if(!exists("dataset")){
+      dataset <- data.table(read.table("jQueryList.txt"))
+      print(dataset)
+    }else{
+      data <-data.table(read.table("jQueryList.txt"))
+      print(data)
+      #dataset <- merge(dataset, data)
+      dataset <- rbind(dataset, data)
+      print(dataset)
+    }
     
   }
   setwd(parent.folder)
 }
 
+setnames(dataset,old="V1",new="number")
+setnames(dataset,old="V2",new="found")
+
+# show data as table
+print(dataset)
+
+# calc. average number of websites that use jQuery
+dataset[,nrow(dataset)/max(number)]
+
+# add a cumulative sum of how many websites were found
+dataset[,count:=1]
+dataset[,count:=cumsum(count)]
+
+# plot this data
+ggplot(dataset,aes(number,count)) + geom_line()
 
 # interpret this data -> your job
 
