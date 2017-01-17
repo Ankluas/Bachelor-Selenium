@@ -6,7 +6,6 @@ from bs4 import BeautifulSoup
 import sys
 import re
 
-
 # Necessary paramaters:
 # - list to read (txt)
 # - counter where to start (int)
