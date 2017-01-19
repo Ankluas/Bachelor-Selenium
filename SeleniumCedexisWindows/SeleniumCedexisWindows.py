@@ -148,6 +148,7 @@ def checkAngular(soup):
 
 # checks if the string react is in a script tag
 def checkReact(soup):
+    global reactCounter
     # searching HTML code in script tags in src attribute for react
     if soup.select('script[src*=react]'):
         reactCounter += 1
