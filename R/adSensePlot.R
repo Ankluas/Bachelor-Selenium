@@ -14,12 +14,12 @@ sub.folders <- list.dirs(parent.folder, recursive=TRUE)
 for(i in sub.folders){
   setwd(i)
   # check whether txt data exists and is empty or not, continue when existing and not empty
-  if((file.exists("jQueryList.txt")) && ((file.size("jQueryList.txt")) > 0)) {
+  if((file.exists("adSenseList.txt")) && ((file.size("adSenseList.txt")) > 0)) {
     if(!exists("dataset")){
-      dataset <- data.table(read.table("jQueryList.txt"))
+      dataset <- data.table(read.table("adSenseList.txt"))
       print(dataset)
     }else{
-      data <-data.table(read.table("jQueryList.txt"))
+      data <-data.table(read.table("adSenseList.txt"))
       print(data)
       #dataset <- merge(dataset, data)
       dataset <- rbind(dataset, data)
@@ -36,7 +36,7 @@ setnames(dataset,old="V2",new="found")
 # show data as table
 print(dataset)
 
-# calc. average number of websites that use jQuery
+# calc. average number of websites that use adSense
 dataset[,nrow(dataset)/max(number)]
 
 # add a cumulative sum of how many websites were found

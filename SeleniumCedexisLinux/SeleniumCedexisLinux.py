@@ -169,6 +169,7 @@ def dealwithAll(driver):
         dealwithEmber(driver)
         dealwithBackbone(driver)
         dealwithKnockout(driver)
+        statistics(driver)
     except TimeoutError:
         failedCounter += 1
         print(linkIndex, "TimeoutError")
@@ -393,6 +394,34 @@ def dealwithCedexis(driver):
         print(linkIndex, "UNEXPECTED EXCEPTION", sys.exc_info()[0])
 
 
+# statistics
+def statistics(driver):
+    global linkIndex
+    global failedCounter
+    try:
+        html = driver.execute_script("return document.documentElement.outerHTML")
+        global linkIndex
+        soup = BeautifulSoup(html, 'html.parser')
+        slist = len(soup.findAll('script'))
+        jlist = len(soup.select('script[type*=javascript]'))
+        srclist = len(soup.findAll('script', src=True))
+        asynclist = len(soup.findAll('script', async=True))
+        httpslist = len(soup.select('script[src*=https://]'))
+        httplist = len(soup.select('script[src*=http://]'))
+        print(str(linkIndex) + " jscount "+str(slist)+" "+str(jlist)+" "+str(srclist)+" "+str(asynclist)+" "+str(httpslist)+" "+str(httplist))
+        statsList.write(str(linkIndex) + " jscount "+str(slist)+" "+str(jlist)+" "+str(srclist)+" "+str(asynclist)+" "+str(httpslist)+" "+str(httplist) + " " + line)
+        statsList.flush()
+    except TimeoutError:
+        failedCounter += 1
+        print(linkIndex, "TimeoutError")
+    except Exception as e:
+        failedCounter += 1
+        print(linkIndex, str(e))
+    except:
+        failedCounter += 1
+        print(linkIndex, "UNEXPECTED EXCEPTION", sys.exc_info()[0])
+        
+
 # flags which decide if search in iframe is necessary
 jflag = 0
 cflag = 0
@@ -413,6 +442,7 @@ failedCounter = 0
 readList = open(sys.argv[1], "r")
 # lists with all found infos for libraries
 cedexisList = open('cedexisList.txt', "w")
+statsList = open('javascript.txt', "w")
 jQueryList = open('jQueryList.txt', "w")
 angularList = open('angularList.txt', "w")
 adSenseList = open('adSenseList.txt', "w")
